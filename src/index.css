@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-[#fafcfd] text-[#1e2d38] dark:bg-black dark:text-slate-100 font-sans antialiased selection:bg-[#cbdcf2]/50 transition-colors duration-300;
+  }
+}
+
+/* Custom Ice Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(203, 220, 242, 0.4);
+  background-color: var(--color-slate-350, rgba(203, 220, 242, 0.4));
+  border-radius: 9999px;
+  border: 1px solid transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(203, 220, 242, 0.7);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+/* Minimal animation classes */
+@keyframes glacier-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+    filter: blur(10px);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.04);
+    filter: blur(8px);
+  }
+}
+
+.animate-glacier-pulse {
+  animation: glacier-pulse 4s ease-in-out infinite;
+}
+
+@keyframes voice-wave {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1.2); }
+}
+
+.animate-voice-wave {
+  animation: voice-wave 1.2s ease-in-out infinite;
+}
+

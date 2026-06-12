@@ -1,0 +1,6 @@
+{
+  "name": "AI Assistant",
+  "description": "An AI chatbot inspired by Greenland's white landscape, featuring speech recognition, conversation history drawer, and a witty assistant personality.",
+  "requestFramePermissions": ["microphone", "geolocation", "camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

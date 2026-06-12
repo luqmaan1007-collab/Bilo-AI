@@ -1,0 +1,82 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and subscription status",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "isPro": {
+          "type": "boolean"
+        },
+        "dailyPictureCount": {
+          "type": "number"
+        },
+        "dailyPictureResetDate": {
+          "type": "string"
+        },
+        "totalStorageUsed": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["email", "isPro"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "A user's chat conversation session",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["title", "updatedAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A message within a conversation",
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["content", "role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stores user profile and limits"
+    },
+    "/users/{userId}/conversations/{convoId}": {
+      "schema": "Conversation",
+      "description": "User conversations"
+    },
+    "/users/{userId}/conversations/{convoId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Conversation messages"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helpers
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_-]+$'); }
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    
+    // Validation Helpers
+    function isValidUser(data) {
+        return data.email is string && data.email.size() <= 256 &&
+               data.isPro is bool;
+    }
+    
+    function isValidConversation(data) {
+        return data.title is string && data.title.size() <= 256 &&
+               data.updatedAt is timestamp;
+    }
+    
+    function isValidMessage(data) {
+        return data.content is string && data.content.size() <= 10000 &&
+               data.role is string && (data.role == 'user' || data.role == 'assistant') &&
+               data.createdAt is timestamp;
+    }
+
+    // Global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User profile
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+    }
+    
+    // Temporary fix for older email-based user collection
+    match /custom_users/{email} {
+        allow read, write: if true;
+        match /conversations/{convoId} {
+            allow read, write: if true;
+            match /messages/{messageId} {
+                allow read, write: if true;
+            }
+        }
+    }
+    
+    // User conversations
+    match /users/{userId}/conversations/{convoId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidId(convoId) && isValidConversation(request.resource.data);
+      allow update: if isOwner(userId) && isValidConversation(request.resource.data);
+      
+      // Messages
+      match /messages/{messageId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(messageId) && isValidMessage(request.resource.data);
+      }
+    }
+  }
+}
